@@ -1,0 +1,25 @@
+
+==============================================
+START : FUNC_BUILD_KERNEL
+==============================================
+
+build project=k
+build common config=msm8974_sec_defconfig 
+build variant config=msm8974pro_sec___defconfig 
+build secure option= 
+build SEANDROID option= 
+[33m
+Help
+./build_msm8974pro_kernel.sh $1 $2 $3
+  $1 : 
+      klte_eur
+      klte_att
+      klte_spr
+      klte_tmo
+      klte_vzw
+      klte_usc
+  $2 : 
+      -B or Nothing  (-B : Secure Binary)
+  $3 : 
+      -E or Nothing  (-E : SEANDROID Binary)
+[0m
