@@ -474,7 +474,7 @@ config RCU_FANOUT_EXACT
 
 config RCU_FAST_NO_HZ
 	bool "Accelerate last non-dyntick-idle CPU's grace periods"
-	depends on NO_HZ && SMP
+	depends on NO_HZ && SMP && !SEC_FACTORY
 	default n
 	help
 	  This option causes RCU to attempt to accelerate grace periods
@@ -953,6 +953,12 @@ config SYSCTL
 config ANON_INODES
 	bool
 
+config PANIC_TIMEOUT
+	int "Default panic timeout"
+	default 0
+	help
+	  Set default panic timeout.
+
 menuconfig EXPERT
 	bool "Configure standard kernel features (expert users)"
 	# Unhide debug options, to make the on-by-default options visible
@@ -1264,6 +1270,7 @@ config SLAB
 	  per cpu and per node queues.
 
 config SLUB
+	depends on BROKEN || NUMA || !DISCONTIGMEM
 	bool "SLUB (Unqueued Allocator)"
 	help
 	   SLUB is a slab allocator that minimizes cache line usage
@@ -1304,6 +1311,12 @@ config MMAP_ALLOW_UNINITIALIZED
 	  it is normally safe to say Y here.
 
 	  See Documentation/nommu-mmap.txt for more information.
+
+config DEFERRED_INITCALLS
+	bool "Deferred initcalls support"
+	default n
+	help
+	  Say 'y' here to include support for deferred initcalls
 
 config PROFILING
 	bool "Profiling support"
