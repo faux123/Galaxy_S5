@@ -44,7 +44,7 @@ modules.builtin
 /System.map
 /Module.markers
 /Module.symvers
-
+arch/arm/boot/zImage-dtb
 #
 # Debian directory (make deb-pkg)
 #
@@ -84,3 +84,8 @@ GTAGS
 *.orig
 *~
 \#*#
+
+mkzip.sh
+out/
+ramfs/
+
