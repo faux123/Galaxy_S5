@@ -280,3 +280,8 @@ config MDSS_DSI_EVENT_HANDLER_PANEL
 config CLK_TUNING
 	bool "Support CLK tuning"
 	default n
+
+config LCD_KCAL
+	bool "Enable sysfs for LCD KCAL"
+	default n
+
