@@ -183,7 +183,7 @@ static int get_time_for_vibetonz(struct timed_output_dev *dev)
 
 static void enable_vibetonz_from_user(struct timed_output_dev *dev, int value)
 {
-	printk(KERN_DEBUG "tspdrv: Enable time = %d msec\n", value);
+	DbgOut(KERN_DEBUG "tspdrv: Enable time = %d msec\n", value);
 	hrtimer_cancel(&timer);
 
 	/* set_vibetonz(value); */
@@ -378,7 +378,7 @@ static void max77803_haptic_power_onoff(int onoff)
 		reg_l23 = regulator_get(NULL, "8084_l23");
 		ret = regulator_set_voltage(reg_l23, 3000000, 3000000);
 		if (IS_ERR(reg_l23)) {
-			printk(KERN_ERR"could not get 8084_l23, rc = %ld\n",
+			DbgOut(KERN_ERR"could not get 8084_l23, rc = %ld\n",
 				PTR_ERR(reg_l23));
 			return;
 		}
@@ -387,20 +387,20 @@ static void max77803_haptic_power_onoff(int onoff)
 	if (onoff) {
 		ret = regulator_enable(reg_l23);
 		if (ret) {
-			printk(KERN_ERR"enable l23 failed, rc=%d\n", ret);
+			DbgOut(KERN_ERR"enable l23 failed, rc=%d\n", ret);
 			return;
 		}
-		printk(KERN_DEBUG"haptic power_on is finished.\n");
+		DbgOut(KERN_DEBUG"haptic power_on is finished.\n");
 	} else {
 		if (regulator_is_enabled(reg_l23)) {
 			ret = regulator_disable(reg_l23);
 			if (ret) {
-				printk(KERN_ERR"disable l23 failed, rc=%d\n",
+				DbgOut(KERN_ERR"disable l23 failed, rc=%d\n",
 									ret);
 				return;
 			}
 		}
-		printk(KERN_DEBUG"haptic power_off is finished.\n");
+		DbgOut(KERN_DEBUG"haptic power_off is finished.\n");
 	}
 }
 #endif
@@ -427,7 +427,7 @@ static void max77803_haptic_power_onoff(int onoff)
 		ret = regulator_set_voltage(reg_l23, 2825000, 2825000);
 #endif
 		if (IS_ERR(reg_l23)) {
-			printk(KERN_ERR"could not get 8941_l23, rc = %ld\n",
+			DbgOut(KERN_ERR"could not get 8941_l23, rc = %ld\n",
 				PTR_ERR(reg_l23));
 			return;
 		}
@@ -436,20 +436,20 @@ static void max77803_haptic_power_onoff(int onoff)
 	if (onoff) {
 		ret = regulator_enable(reg_l23);
 		if (ret) {
-			printk(KERN_ERR"enable l23 failed, rc=%d\n", ret);
+			DbgOut(KERN_ERR"enable l23 failed, rc=%d\n", ret);
 			return;
 		}
-		printk(KERN_DEBUG"haptic power_on is finished.\n");
+		DbgOut(KERN_DEBUG"haptic power_on is finished.\n");
 	} else {
 		if (regulator_is_enabled(reg_l23)) {
 			ret = regulator_disable(reg_l23);
 			if (ret) {
-				printk(KERN_ERR"disable l23 failed, rc=%d\n",
+				DbgOut(KERN_ERR"disable l23 failed, rc=%d\n",
 									ret);
 				return;
 			}
 		}
-		printk(KERN_DEBUG"haptic power_off is finished.\n");
+		DbgOut(KERN_DEBUG"haptic power_off is finished.\n");
 	}
 #else
 	static struct regulator *reg_l17;
@@ -459,7 +459,7 @@ static void max77803_haptic_power_onoff(int onoff)
 		ret = regulator_set_voltage(reg_l17, 3000000, 3000000);
 
 		if (IS_ERR(reg_l17)) {
-			printk(KERN_ERR"could not get 8941_l17, rc = %ld\n",
+			DbgOut(KERN_ERR"could not get 8941_l17, rc = %ld\n",
 				PTR_ERR(reg_l17));
 			return;
 		}
@@ -468,20 +468,20 @@ static void max77803_haptic_power_onoff(int onoff)
 	if (onoff) {
 		ret = regulator_enable(reg_l17);
 		if (ret) {
-			printk(KERN_ERR"enable l17 failed, rc=%d\n", ret);
+			DbgOut(KERN_ERR"enable l17 failed, rc=%d\n", ret);
 			return;
 		}
-		printk(KERN_DEBUG"haptic power_on is finished.\n");
+		DbgOut(KERN_DEBUG"haptic power_on is finished.\n");
 	} else {
 		if (regulator_is_enabled(reg_l17)) {
 			ret = regulator_disable(reg_l17);
 			if (ret) {
-				printk(KERN_ERR"disable l17 failed, rc=%d\n",
+				DbgOut(KERN_ERR"disable l17 failed, rc=%d\n",
 									ret);
 				return;
 			}
 		}
-		printk(KERN_DEBUG"haptic power_off is finished.\n");
+		DbgOut(KERN_DEBUG"haptic power_off is finished.\n");
 	}
 #endif
 }
@@ -502,7 +502,7 @@ static int32_t drv2603_gpio_init(void)
 	int ret;
 	ret = gpio_request(vibrator_drvdata.drv2603_en_gpio, "vib enable");
 	if (ret < 0) {
-		printk(KERN_ERR "vib enable gpio_request is failed\n");
+		DbgOut(KERN_ERR "vib enable gpio_request is failed\n");
 		return 1;
 	}
 	return 0;
@@ -786,7 +786,7 @@ static ssize_t write(struct file *file, const char *buf, size_t count,
 	g_nforcelog[g_nforcelog_index++] = g_cSPIBuffer[0];
 	if (g_nforcelog_index >= FORCE_LOG_BUFFER_SIZE) {
 		for (i = 0; i < FORCE_LOG_BUFFER_SIZE; i++) {
-			printk(KERN_INFO "%d\t%d\n", g_ntime, g_nforcelog[i]);
+			DbgOut(KERN_INFO "%d\t%d\n", g_ntime, g_nforcelog[i]);
 			g_ntime += TIME_INCREMENT;
 		}
 		g_nforcelog_index = 0;
@@ -805,7 +805,7 @@ static long ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 #ifdef QA_TEST
 	int i;
 #endif
-	printk(KERN_DEBUG "tspdrv: %s %d\n", __func__, cmd);
+	DbgOut(KERN_DEBUG "tspdrv: %s %d\n", __func__, cmd);
 	/* DbgOut(KERN_INFO "tspdrv: ioctl cmd[0x%x].\n", cmd); */
 	switch (cmd) {
 	case TSPDRV_STOP_KERNEL_TIMER:
@@ -825,7 +825,7 @@ static long ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 #ifdef QA_TEST
 		if (g_nforcelog_index) {
 			for (i = 0; i < g_nforcelog_index; i++) {
-				printk(KERN_INFO "%d\t%d\n"
+				DbgOut(KERN_INFO "%d\t%d\n"
 					   , g_ntime, g_nforcelog[i]);
 				g_ntime += TIME_INCREMENT;
 			}
