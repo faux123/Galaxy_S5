@@ -157,6 +157,9 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 #ifdef CONFIG_SEC_DEBUG_LMK_MEMINFO
 	static DEFINE_RATELIMIT_STATE(lmk_rs, DEFAULT_RATELIMIT_INTERVAL, 1);
 #endif
+#ifdef CONFIG_ZSWAP
+	struct sysinfo si;
+#endif
 
 	if (nr_to_scan > 0) {
 		if (mutex_lock_interruptible(&scan_mutex) < 0)
@@ -166,6 +169,7 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 	other_free = global_page_state(NR_FREE_PAGES);
 
 #ifdef CONFIG_ZSWAP
+	si_swapinfo(&si);
 	if (!current_is_kswapd())
 #endif
 		other_free -= global_page_state(NR_FREE_CMA_PAGES);
@@ -173,7 +177,8 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 	if (global_page_state(NR_SHMEM) + total_swapcache_pages <
 		global_page_state(NR_FILE_PAGES))
 		other_file = global_page_state(NR_FILE_PAGES) -
-						global_page_state(NR_SHMEM) -
+						global_page_state(NR_SHMEM) +
+						(si.freeswap >> 1) -
 						total_swapcache_pages;
 	else
 		other_file = 0;
