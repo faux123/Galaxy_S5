@@ -212,13 +212,13 @@ int vfsspi_sendDrdySignal(struct vfsspi_devData *vfsSpiDev)
 	struct task_struct *t;
 	int ret = 0;
 
-	pr_debug("%s\n", __func__);
+	//pr_debug("%s\n", __func__);
 
 	if (vfsSpiDev->userPID != 0) {
 		rcu_read_lock();
 		/* find the task_struct associated with userpid */
-		pr_debug("%s Searching task with PID=%08x\n",
-			__func__, vfsSpiDev->userPID);
+		//pr_debug("%s Searching task with PID=%08x\n",
+		//	__func__, vfsSpiDev->userPID);
 		t = pid_task(find_pid_ns(vfsSpiDev->userPID, &init_pid_ns),
 			     PIDTYPE_PID);
 		if (t == NULL) {
@@ -233,7 +233,7 @@ int vfsspi_sendDrdySignal(struct vfsspi_devData *vfsSpiDev)
 		if (ret < 0)
 			pr_err("%s Error sending signal\n", __func__);
 	} else {
-		pr_debug("%s pid not received yet\n", __func__);
+		//pr_debug("%s pid not received yet\n", __func__);
 	}
 
 	return ret;
@@ -243,7 +243,7 @@ irqreturn_t vfsspi_irq(int irq, void *context)
 {
 	struct vfsspi_devData *vfsSpiDev = context;
 
-	pr_debug("%s\n", __func__);
+	//pr_debug("%s\n", __func__);
 
 	if ((gpio_get_value(vfsSpiDev->drdyPin)
 		== DRDY_ACTIVE_STATUS)) {
@@ -265,7 +265,7 @@ static inline ssize_t vfsspi_writeSync(struct vfsspi_devData *vfsSpiDev,
 	struct spi_message m;
 	struct spi_transfer t;
 
-	pr_debug("%s\n", __func__);
+	//pr_debug("%s\n", __func__);
 
 	spi_message_init(&m);
 	memset(&t, 0, sizeof(t));
@@ -282,8 +282,8 @@ static inline ssize_t vfsspi_writeSync(struct vfsspi_devData *vfsSpiDev,
 	if (status == 0)
 		status = m.actual_length;
 
-	pr_debug("%s vfsspi_writeSync,length=%d\n",
-		__func__, m.actual_length);
+	//pr_debug("%s vfsspi_writeSync,length=%d\n",
+	//	__func__, m.actual_length);
 
 	return status;
 }
@@ -296,7 +296,7 @@ inline ssize_t vfsspi_readSync(struct vfsspi_devData *vfsSpiDev,
 	struct spi_message m;
 	struct spi_transfer t;
 
-	pr_debug("%s\n", __func__);
+	//pr_debug("%s\n", __func__);
 
 	spi_message_init(&m);
 	memset(&t, 0x0, sizeof(t));
@@ -310,18 +310,18 @@ inline ssize_t vfsspi_readSync(struct vfsspi_devData *vfsSpiDev,
 
 	status = spi_sync(vfsSpiDev->spi, &m);
 
-	pr_debug("%s: status=%d\n", __func__, status);
+	//pr_debug("%s: status=%d\n", __func__, status);
 	if (status == 0) {
-		pr_debug("%s: m.actual_length=%d\n",
-			__func__, m.actual_length);
+		//pr_debug("%s: m.actual_length=%d\n",
+		//	__func__, m.actual_length);
 
 		/* FIXME: This is temporary workaround for Fluid,
 		   instead of returning actual read data length
 		   spi_sync is returning 0 */
 		status = len;
 	}
-	pr_debug("%s length=%d\n",
-		__func__, len);
+	//pr_debug("%s length=%d\n",
+	//	__func__, len);
 	return status;
 }
 
@@ -334,7 +334,7 @@ ssize_t vfsspi_write(struct file *filp, const char __user *buf, size_t count,
 	struct vfsspi_devData *vfsSpiDev = NULL;
 	ssize_t status = 0;
 
-	pr_debug("%s\n", __func__);
+	//pr_debug("%s\n", __func__);
 
 	if (count > DEFAULT_BUFFER_SIZE || count == 0)
 		return -EMSGSIZE;
@@ -372,7 +372,7 @@ ssize_t vfsspi_read(struct file *filp, char __user *buf, size_t count,
 	struct vfsspi_devData *vfsSpiDev = NULL;
 	unsigned char *readBuf = NULL;
 	ssize_t status    = 0;
-	pr_debug("%s\n", __func__);
+	//pr_debug("%s\n", __func__);
 
 	vfsSpiDev = filp->private_data;
 	if (vfsSpiDev->streamBuffer != NULL
@@ -403,7 +403,7 @@ ssize_t vfsspi_read(struct file *filp, char __user *buf, size_t count,
 			status = -EFAULT;
 		} else {
 			status = status - missing;
-			pr_debug("%s status=%d\n", __func__, status);
+			//pr_debug("%s status=%d\n", __func__, status);
 		}
 	} else
 		pr_err("%s err status=%d\n", __func__, status);
@@ -421,7 +421,7 @@ int vfsspi_xfer(struct vfsspi_devData *vfsSpiDev, struct vfsspi_iocTransfer *tr)
 	struct spi_message m;
 	struct spi_transfer t;
 
-	pr_debug("%s\n", __func__);
+	//pr_debug("%s\n", __func__);
 
 	if (vfsSpiDev == NULL || tr == NULL)
 		return -EFAULT;
@@ -466,8 +466,8 @@ int vfsspi_xfer(struct vfsspi_devData *vfsSpiDev, struct vfsspi_iocTransfer *tr)
 				tr->len = tr->len - missing;
 		}
 	}
-	pr_debug("%s length=%d, status=%d\n",
-		__func__, tr->len, status);
+	//pr_debug("%s length=%d, status=%d\n",
+	//	__func__, tr->len, status);
 	return status;
 }
 #endif
@@ -618,7 +618,7 @@ long vfsspi_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 	struct vfsspi_iocFreqTable tmpFreqData;
 #endif
 
-	pr_debug("%s\n", __func__);
+	//pr_debug("%s\n", __func__);
 
 	if (_IOC_TYPE(cmd) != VFSSPI_IOCTL_MAGIC) {
 		pr_err("%s invalid cmd= 0x%X Received= 0x%X Expected= 0x%X\n",
@@ -633,17 +633,17 @@ long vfsspi_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 	switch (cmd) {
 
 	case VFSSPI_IOCTL_DEVICE_SUSPEND:
-		pr_debug("VFSSPI_IOCTL_DEVICE_SUSPEND:\n");
+		//pr_debug("VFSSPI_IOCTL_DEVICE_SUSPEND:\n");
 		vfsspi_suspend(vfsSpiDev);
 		break;
 
 	case VFSSPI_IOCTL_DEVICE_RESET:
-		pr_debug("%s VFSSPI_IOCTL_DEVICE_RESET:\n", __func__);
+		//pr_debug("%s VFSSPI_IOCTL_DEVICE_RESET:\n", __func__);
 		vfsspi_hardReset(vfsSpiDev);
 		break;
 #ifndef ENABLE_SENSORS_FPRINT_SECURE
 	case VFSSPI_IOCTL_RW_SPI_MESSAGE:
-		pr_debug("%s VFSSPI_IOCTL_RW_SPI_MESSAGE\n", __func__);
+		//pr_debug("%s VFSSPI_IOCTL_RW_SPI_MESSAGE\n", __func__);
 		dup = kmalloc(sizeof(struct vfsspi_iocTransfer), GFP_KERNEL);
 		if (dup != NULL) {
 			if (copy_from_user(dup, (void *)arg,
@@ -670,35 +670,35 @@ long vfsspi_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 #endif
 
 	case VFSSPI_IOCTL_SET_CLK:
-		pr_debug("%s VFSSPI_IOCTL_SET_CLK", __func__);
+		//pr_debug("%s VFSSPI_IOCTL_SET_CLK", __func__);
 		if (copy_from_user(&clock, (void *)arg,
 		     sizeof(unsigned short)) == 0) {
 
 			spin_lock_irq(&vfsSpiDev->vfsSpiLock);
 			spidev = spi_dev_get(vfsSpiDev->spi);
 			spin_unlock_irq(&vfsSpiDev->vfsSpiLock);
-			pr_debug("%s: clock=%d\n", __func__, clock);
+			//pr_debug("%s: clock=%d\n", __func__, clock);
 			if (spidev != NULL) {
 				switch (clock) {
 				case 0:
 					/* Running baud rate. */
-					pr_debug("%s Running baud rate.\n",
-						__func__);
+					//pr_debug("%s Running baud rate.\n",
+					//	__func__);
 					spidev->max_speed_hz = MAX_BAUD_RATE;
 					vfsSpiDev->curSpiSpeed = MAX_BAUD_RATE;
 					break;
 
 				case 0xFFFF:
 					/* Slow baud rate */
-					pr_debug("%s slow baud rate.\n",
-						__func__);
+					//pr_debug("%s slow baud rate.\n",
+					//	__func__);
 					spidev->max_speed_hz = SLOW_BAUD_RATE;
 					vfsSpiDev->curSpiSpeed = SLOW_BAUD_RATE;
 					break;
 
 				default:
-					pr_debug("%s baud rate is %d.\n",
-						__func__, clock);
+					//pr_debug("%s baud rate is %d.\n",
+					//	__func__, clock);
 #ifdef TEST_FIXED_FREQUENCY
 					if (clock <= 4800)
 						vfsSpiDev->curSpiSpeed =
@@ -754,8 +754,8 @@ long vfsspi_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 #ifndef ENABLE_SENSORS_FPRINT_SECURE
 	case VFSSPI_IOCTL_CHECK_DRDY:
 		retVal = -ETIMEDOUT;
-		pr_debug("%s: VFSSPI_IOCTL_CHECK_DRDY",
-			__func__);
+		//pr_debug("%s: VFSSPI_IOCTL_CHECK_DRDY",
+		//	__func__);
 		dataToRead = 0;
 
 		if (gpio_get_value(vfsSpiDev->drdyPin)
@@ -809,7 +809,7 @@ long vfsspi_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 
 #ifndef ENABLE_SENSORS_FPRINT_SECURE
 	case VFSSPI_IOCTL_SET_USER_DATA:
-		pr_debug("%s VFSSPI_IOCTL_SET_USER_DATA\n", __func__);
+		//pr_debug("%s VFSSPI_IOCTL_SET_USER_DATA\n", __func__);
 		if ((void *)arg == NULL) {
 			pr_err("%s VFSSPI_IOCTL_SET_USER_DATA is failed\n",
 				__func__);
@@ -850,7 +850,7 @@ long vfsspi_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 	case VFSSPI_IOCTL_GET_USER_DATA:
 		retVal = -EFAULT;
 
-		pr_debug("%s VFSSPI_IOCTL_GET_USER_DATA\n", __func__);
+		//pr_debug("%s VFSSPI_IOCTL_GET_USER_DATA\n", __func__);
 
 		if (vfsSpiDev->userInfoData.buffer != NULL
 		    && (void *)arg != NULL) {
@@ -886,7 +886,7 @@ long vfsspi_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 #endif
 
 	case VFSSPI_IOCTL_SET_DRDY_INT:
-		pr_debug("%s VFSSPI_IOCTL_SET_DRDY_INT\n", __func__);
+		//pr_debug("%s VFSSPI_IOCTL_SET_DRDY_INT\n", __func__);
 
 		if (copy_from_user(&drdy_enable_flag,
 			(void *)arg, sizeof(drdy_enable_flag)) != 0) {
@@ -902,7 +902,7 @@ long vfsspi_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 
 #ifndef ENABLE_SENSORS_FPRINT_SECURE
 	case VFSSPI_IOCTL_STREAM_READ_START:
-		pr_debug("VFSSPI_IOCTL_STREAM_READ_START");
+		//pr_debug("VFSSPI_IOCTL_STREAM_READ_START");
 		if (copy_from_user(&streamDataSize, (void *)arg,
 			sizeof(unsigned int)) != 0) {
 			pr_err("Failed copy from user.\n");
@@ -921,7 +921,7 @@ long vfsspi_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 		break;
 
 	case VFSSPI_IOCTL_STREAM_READ_STOP:
-		pr_debug("VFSSPI_IOCTL_STREAM_READ_STOP");
+		//pr_debug("VFSSPI_IOCTL_STREAM_READ_STOP");
 		if (vfsSpiDev->streamBuffer != NULL) {
 			kfree(vfsSpiDev->streamBuffer);
 			vfsSpiDev->streamBuffer = NULL;
@@ -1080,9 +1080,9 @@ int vfsspi_open(struct inode *inode, struct file *filp)
 	mutex_unlock(&deviceListMutex);
 	mutex_unlock(&kernel_lock);
 
-	pr_debug("%s drdy(%d)=%d, sleepPin(%d)=%d\n", __func__,
-		vfsSpiDev->drdyPin, gpio_get_value(vfsSpiDev->drdyPin),
-		vfsSpiDev->sleepPin, gpio_get_value(vfsSpiDev->sleepPin));
+	//pr_debug("%s drdy(%d)=%d, sleepPin(%d)=%d\n", __func__,
+	//	vfsSpiDev->drdyPin, gpio_get_value(vfsSpiDev->drdyPin),
+	//	vfsSpiDev->sleepPin, gpio_get_value(vfsSpiDev->sleepPin));
 
 	return status;
 }
