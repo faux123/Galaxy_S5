@@ -28,7 +28,7 @@
 
 //#define DEBUG_CPU_LIMITER
 
-uint32_t limited_max_freq = 2457600;
+uint32_t limited_max_freq = 2572800;
 
 static int update_cpu_max_freq(int cpu, uint32_t max_freq)
 {
