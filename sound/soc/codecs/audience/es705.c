@@ -3295,6 +3295,7 @@ int es705_put_veq_block(int volume)
 		ret = es705->dev_read(es705, (char *)&resp,
 				ES705_READ_VE_WIDTH);
 		count++;
+		usleep_range(2000, 2000);
 	} while (resp != cmd && count < max_retry_cnt);
 
 	if (resp != cmd) {
@@ -3333,6 +3334,7 @@ int es705_put_veq_block(int volume)
 		ret = es705->dev_read(es705, (char *)&fin_resp,
 				ES705_READ_VE_WIDTH);
 		count++;
+		usleep_range(2000, 2000);
 	} while (fin_resp != 0x802f0000 && count < max_retry_cnt);
 
 	if (fin_resp != 0x802f0000) {
